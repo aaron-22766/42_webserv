@@ -1,4 +1,5 @@
 *
+!README.md
 !Makefile
 !include
 !include/**
@@ -9,4 +10,5 @@
 !conf_files
 !conf_files/**
 !.gitignore
+!.gitattributes
 .DS_Store
