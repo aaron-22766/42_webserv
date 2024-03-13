@@ -1,7 +1,7 @@
 #include "../../include/webserv.hpp"
 
 Request::Request(): maxBodySize_(DEFAULT_CLIENT_BODY_SIZE), state_(stateGetHeaderData), rhstate_(stateParseMethod), \
-					headersLen_(0), skip_(4), method_(OTHER), contentLen_(0), statusCode_(0) {
+					headersLen_(0), skip_(4), method_(UNKNOWN), contentLen_(0), statusCode_(0) {
 }
 
 Request::~Request() {}
@@ -54,7 +54,7 @@ void Request::clearRequest() {
 	skip_ = 4;
 	methodStr_.clear();
 	methodStr_ = "";
-	method_ = OTHER;
+	method_ = UNKNOWN;
 	uri_.clear();
 	uri_ = "";
 	path_.clear();
@@ -136,15 +136,17 @@ void	Request::parseMethod(std::istringstream& requestLine) {
 	requestLine >> methodStr_;
 	if (requestLine.fail() || methodStr_.empty())
 		return setError(requestParseFAIL, 500);
-	const std::string methods[4] = {"GET", "POST", "DELETE", "HEAD"};
-	for (int i = 0; i < 4; i++) {
-		if (methods[i] == methodStr_) {
-			method_ = static_cast<RequestMethod>(i);
-			break ;
-		}
-	}
-	if (method_ == OTHER)
+    if (methodStr_ == "GET") {
+        method_ = GET;
+    } else if (methodStr_ == "HEAD") {
+        method_ = HEAD;
+    } else if (methodStr_ == "POST") {
+        method_ = POST;
+    } else if (methodStr_ == "DELETE") {
+        method_ = DELETE;
+    } else {
 		return setError(requestERROR, 501);
+    }
 	rhstate_ = stateParseUri;
 	return ;
 }

@@ -5,7 +5,7 @@
 /* ************************************************************************** */
 
 bool Response::isCGI() {
-    if (_request.getMethod() == DELETE) {
+    if ((_request.getMethod() & CGI_METHODS) == 0) {
         return (false);
     }
 

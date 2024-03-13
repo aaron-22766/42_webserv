@@ -152,14 +152,13 @@ void Response::performPOST() {
         std::string index = "index." + std::string(extension);
         postPath = combinePaths(_path, index);
     }
+    if (access(postPath.c_str(), F_OK) == 0) {
+        throw 403;
+    }
     std::string created; // dir creation
     std::string dir = postPath.substr(0, postPath.rfind('/'));
     if (access(dir.c_str(), F_OK) != 0) {
-        // if directory doesn't exist :
-        
-        // throw 409;
-
-        // or create all directories?
+        // create all directories
         for (size_t ext = postPath.find('/'); ext != std::string::npos;
             ext = postPath.find('/' , ext + 1)) {
             dir = postPath.substr(0, ext);
@@ -171,9 +170,6 @@ void Response::performPOST() {
                 }
             }
         }
-    }
-    if (access(postPath.c_str(), F_OK) == 0) {
-        throw 403;
     }
     std::ofstream file(postPath.c_str(), std::ofstream::binary);
     if (file.is_open()) {

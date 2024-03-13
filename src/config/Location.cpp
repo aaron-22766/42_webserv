@@ -52,15 +52,17 @@ void Location::setIndex(std::string index) {
 }
 
 void Location::setMethod(std::string method) {
-	int methodNr = 3;
-	std::string methods[] = {"GET", "POST", "DELETE"};
-	int i;
-	for (i = 0; i < methodNr; i++)
-		if (method == methods[i])
-			break;
-	if (i == methodNr)
+    if (method == "GET") {
+        this->allowedMethods.push_back(GET);
+    } else if (method == "HEAD") {
+        this->allowedMethods.push_back(HEAD);
+    } else if (method == "POST") {
+        this->allowedMethods.push_back(POST);
+    } else if (method == "DELETE") {
+        this->allowedMethods.push_back(DELETE);
+    } else {
 		throw std::runtime_error("Configuration file error: method does not exist.\n");
-	this->allowedMethods.push_back(static_cast<RequestMethod>(i));
+    }
 }
 
 void Location::setAutoIndex(std::string autoindex) {

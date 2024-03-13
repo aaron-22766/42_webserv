@@ -76,19 +76,13 @@
 /*                                   ENUMS                                    */
 /* ************************************************************************** */
 
-enum WebservError {
-	SUCCESS = 0,
-	ERRNO,
-	MEMFAIL,
-    INVARGS
-};
-
 enum RequestMethod {
-	GET,
-	POST,
-	DELETE,
-	HEAD,
-    OTHER
+    UNKNOWN = 0,
+	GET = 0b011,
+	HEAD = 0b010,
+	POST = 0b101,
+	DELETE = 0b100,
+    CGI_METHODS = 0b001,
 };
 
 enum Return {
